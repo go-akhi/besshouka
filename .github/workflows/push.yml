@@ -1,0 +1,25 @@
+name: Main Branch
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test-full:
+    name: Full Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run full test suite
+        run: pytest tests/ -v
+
+      - name: Coverage report
+        run: pytest tests/ --cov=besshouka --cov-report=term-missing

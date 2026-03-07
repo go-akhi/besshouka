@@ -1,0 +1,52 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & Security
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install linters
+        run: pip install ruff bandit
+
+      - name: Ruff check
+        run: ruff check besshouka/
+
+      - name: Ruff format check
+        run: ruff format --check besshouka/
+
+      - name: Bandit security scan
+        run: bandit -r besshouka/ -c pyproject.toml
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/dependency-review-action@v4
+
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests (excluding slow)
+        run: pytest tests/ -m "not slow" -v
