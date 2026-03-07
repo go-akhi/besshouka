@@ -1,3 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.backends"
+
+[project]
+name = "besshouka"
+version = "0.1.0"
+description = "Local-first Japanese PII anonymization engine"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11,<3.14"
+authors = [
+    { name = "akhi" },
+]
+keywords = ["pii", "anonymization", "japanese", "nlp", "privacy", "ginza"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Security",
+]
+dependencies = [
+    "spacy>=3.7,<4.0",
+    "ginza>=5.2,<6.0",
+    "ja-ginza>=5.2,<6.0",
+    "SudachiPy>=0.6,<1.0",
+    "SudachiDict-core>=20240109",
+    "typer>=0.9,<1.0",
+    "rich>=13.0,<14.0",
+    "pyyaml>=6.0,<7.0",
+    "cryptography>=42.0,<44.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<10.0",
+    "pytest-cov>=5.0,<7.0",
+]
+
+[project.scripts]
+besshouka = "besshouka.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/akhi/besshouka"
+Repository = "https://github.com/akhi/besshouka"
+Issues = "https://github.com/akhi/besshouka/issues"
+
 [tool.bandit]
 exclude_dirs = ["tests"]
 skips = ["B101"]  # assert statements are fine in production code for this project

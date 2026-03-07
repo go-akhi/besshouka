@@ -12,30 +12,26 @@ A local-first Japanese PII anonymization engine. Besshouka detects personally id
 ## Quick Start
 
 ```bash
-git clone https://github.com/akhi/besshouka.git
-cd besshouka
-python -m venv env_besshouka
-source env_besshouka/bin/activate
-pip install -r requirements.txt
+pip install besshouka
 ```
 
 ### Anonymize text
 
 ```bash
-python -m besshouka.cli anonymize "田中太郎の電話番号は090-1234-5678です"
+besshouka anonymize "田中太郎の電話番号は090-1234-5678です"
 # Output: <氏名>の電話番号は090-1234-****です
 ```
 
 ### Analyze (detect only)
 
 ```bash
-python -m besshouka.cli analyze --explain "田中太郎の電話番号は090-1234-5678です"
+besshouka analyze --explain "田中太郎の電話番号は090-1234-5678です"
 ```
 
 ### Use custom rules
 
 ```bash
-python -m besshouka.cli anonymize \
+besshouka anonymize \
   --recognizers my_patterns.yaml \
   --rules my_operators.yaml \
   --input document.txt \
@@ -134,7 +130,15 @@ operators:
     function: "my_module.my_transform"
 ```
 
-## Running Tests
+## Development
+
+```bash
+git clone https://github.com/akhi/besshouka.git
+cd besshouka
+pip install -e ".[dev]"
+```
+
+### Running Tests
 
 ```bash
 # All tests (excluding slow GiNZA model tests)
@@ -149,7 +153,7 @@ pytest tests/ --cov=besshouka --cov-report=term-missing
 
 ## Requirements
 
-- Python 3.13+
+- **Python >=3.11, <3.14** — Python 3.14 is not yet supported due to [PyO3](https://github.com/PyO3/pyo3) compatibility with SudachiPy (GiNZA's tokenizer). Python 3.13 is recommended.
 - GiNZA / spaCy (for NER)
 - See [requirements.txt](requirements.txt) for full list
 
