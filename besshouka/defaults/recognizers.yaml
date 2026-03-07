@@ -1,0 +1,82 @@
+recognizers:
+  # Mobile phone numbers (090/080/070)
+  - name: mobile_phone
+    entity_type: PHONE_NUMBER
+    pattern: '0[789]0-?\d{4}-?\d{4}'
+    score: 1.0
+    source: regex_registry
+
+  # Landline phone numbers (area code + number)
+  - name: landline_phone
+    entity_type: PHONE_NUMBER
+    pattern: '0\d{1,4}-?\d{1,4}-?\d{4}'
+    score: 1.0
+    source: regex_registry
+
+  # Toll-free numbers (0120/0800)
+  - name: tollfree_phone
+    entity_type: PHONE_NUMBER
+    pattern: '0(?:120|800)-?\d{3}-?\d{3}'
+    score: 1.0
+    source: regex_registry
+
+  # Email addresses
+  - name: email
+    entity_type: EMAIL
+    pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+    score: 1.0
+    source: regex_registry
+
+  # My Number (マイナンバー) — 12-digit individual number
+  - name: my_number
+    entity_type: MY_NUMBER
+    pattern: '\d{4}\s?\d{4}\s?\d{4}'
+    score: 1.0
+    source: regex_registry
+
+  # Japanese postal code (〒XXX-XXXX)
+  - name: postal_code
+    entity_type: POSTAL_CODE
+    pattern: '〒?\d{3}-\d{4}'
+    score: 1.0
+    source: regex_registry
+
+  # Credit card numbers (Visa, Mastercard, JCB, AMEX)
+  - name: credit_card_visa_mc
+    entity_type: CREDIT_CARD
+    pattern: '[45]\d{3}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}'
+    score: 1.0
+    source: regex_registry
+
+  - name: credit_card_amex
+    entity_type: CREDIT_CARD
+    pattern: '3[47]\d{2}[\s-]?\d{6}[\s-]?\d{5}'
+    score: 1.0
+    source: regex_registry
+
+  - name: credit_card_jcb
+    entity_type: CREDIT_CARD
+    pattern: '35\d{2}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}'
+    score: 1.0
+    source: regex_registry
+
+  # Japanese bank account number (7 digits)
+  - name: bank_account
+    entity_type: BANK_ACCOUNT
+    pattern: '\d{7}'
+    score: 0.5
+    source: regex_registry
+
+  # Japanese driver's license number (12 digits)
+  - name: drivers_license
+    entity_type: DRIVERS_LICENSE
+    pattern: '\d{12}'
+    score: 0.7
+    source: regex_registry
+
+  # Japanese passport number (2 letters + 7 digits)
+  - name: passport
+    entity_type: PASSPORT
+    pattern: '[A-Z]{2}\d{7}'
+    score: 1.0
+    source: regex_registry

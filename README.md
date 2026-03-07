@@ -1,3 +1,158 @@
-# besshouka
+# Besshouka (別称化)
 
-A Japanese native PII redaction tool for detecting, redacting, masking, and anonymizing sensitive data (PII) 
+A local-first Japanese PII anonymization engine. Besshouka detects personally identifiable information (PII), payment card data (PCI), and protected health information (PHI) in Japanese text and transforms it using configurable rules — all without sending data to any external service.
+
+## Why Besshouka?
+
+- **Japanese-native** — built specifically for Japanese data patterns: マイナンバー, Japanese phone formats, postal codes, full-width character handling, and GiNZA-powered NER for names, organizations, and locations.
+- **Local-first** — everything runs on your machine. No cloud APIs, no data leaves the device.
+- **Pluggable** — add custom regex recognizers via YAML, write your own operators in Python, or plug in any importable function as a custom operator. No forking required.
+- **Auditable** — every anonymization operation is logged in an audit trail with the original text, the operator used, and the new indices.
+
+## Quick Start
+
+```bash
+git clone https://github.com/akhi/besshouka.git
+cd besshouka
+python -m venv env_besshouka
+source env_besshouka/bin/activate
+pip install -r requirements.txt
+```
+
+### Anonymize text
+
+```bash
+python -m besshouka.cli anonymize "田中太郎の電話番号は090-1234-5678です"
+# Output: <氏名>の電話番号は090-1234-****です
+```
+
+### Analyze (detect only)
+
+```bash
+python -m besshouka.cli analyze --explain "田中太郎の電話番号は090-1234-5678です"
+```
+
+### Use custom rules
+
+```bash
+python -m besshouka.cli anonymize \
+  --recognizers my_patterns.yaml \
+  --rules my_operators.yaml \
+  --input document.txt \
+  --output anonymized.txt
+```
+
+## Programmatic Usage
+
+```python
+from besshouka.config.loader import load_recognizer_config, load_operator_config
+from besshouka.orchestrator.pipeline import run
+
+rec_config = load_recognizer_config("path/to/recognizers.yaml")
+op_config = load_operator_config("path/to/operators.yaml")
+
+ctx = run("田中太郎の電話番号は090-1234-5678です", rec_config, op_config)
+
+print(ctx.engine_result.text)   # anonymized text
+print(ctx.engine_result.items)  # audit trail
+```
+
+## Architecture
+
+```
+Text In → [Analyzer] → [Anonymizer] → Text Out
+```
+
+| Module        | Role                                              |
+|---------------|---------------------------------------------------|
+| **Analyzer**  | Detects PII using regex patterns + GiNZA NER      |
+| **Anonymizer**| Transforms PII using pluggable operators           |
+| **Orchestrator** | Wires analyzer and anonymizer into a pipeline  |
+
+Each module has its own README with extension guides. See the [`besshouka/`](besshouka/) directory.
+
+## Built-in Recognizers
+
+| Pattern           | Entity Type       |
+|-------------------|-------------------|
+| Mobile phone      | `PHONE_NUMBER`    |
+| Landline phone    | `PHONE_NUMBER`    |
+| Toll-free phone   | `PHONE_NUMBER`    |
+| Email address     | `EMAIL`           |
+| マイナンバー       | `MY_NUMBER`       |
+| Postal code       | `POSTAL_CODE`     |
+| Credit card       | `CREDIT_CARD`     |
+| Bank account      | `BANK_ACCOUNT`    |
+| Driver's license  | `DRIVERS_LICENSE` |
+| Passport          | `PASSPORT`        |
+| Person names      | `PERSON` (GiNZA)  |
+| Organizations     | `ORGANIZATION` (GiNZA) |
+| Locations         | `LOCATION` (GiNZA)|
+
+## Built-in Operators
+
+| Operator  | What it does                          |
+|-----------|---------------------------------------|
+| `replace` | Substitute with a fixed value         |
+| `mask`    | Mask characters from end with a symbol|
+| `redact`  | Remove entirely                       |
+| `hash`    | Salted SHA-256 hex digest             |
+| `encrypt` | Fernet symmetric encryption           |
+| `keep`    | Pass through unchanged                |
+| `custom`  | Call any importable Python function    |
+
+## Extending Besshouka
+
+### Add a regex recognizer (no code)
+
+Add an entry to your recognizers YAML:
+
+```yaml
+recognizers:
+  - name: employee_id
+    entity_type: EMPLOYEE_ID
+    pattern: 'EMP-[A-Z]{2}\d{6}'
+    score: 1.0
+    source: custom
+```
+
+### Add a custom operator (no subclassing)
+
+Write a function anywhere importable:
+
+```python
+def my_transform(text: str, params: dict) -> str:
+    return text[::-1]  # reverse it, or whatever you need
+```
+
+Reference it in your operators YAML:
+
+```yaml
+operators:
+  EMPLOYEE_ID:
+    method: custom
+    function: "my_module.my_transform"
+```
+
+## Running Tests
+
+```bash
+# All tests (excluding slow GiNZA model tests)
+pytest tests/ -m "not slow"
+
+# All tests including GiNZA
+pytest tests/
+
+# With coverage
+pytest tests/ --cov=besshouka --cov-report=term-missing
+```
+
+## Requirements
+
+- Python 3.13+
+- GiNZA / spaCy (for NER)
+- See [requirements.txt](requirements.txt) for full list
+
+## License
+
+[MIT](LICENSE)

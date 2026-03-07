@@ -1,0 +1,56 @@
+operators:
+  PERSON:
+    method: replace
+    value: "<氏名>"
+
+  LOCATION:
+    method: replace
+    value: "<住所>"
+
+  ORGANIZATION:
+    method: replace
+    value: "<組織名>"
+
+  PHONE_NUMBER:
+    method: mask
+    char: "*"
+    from_end: 4
+
+  EMAIL:
+    method: replace
+    value: "<メール>"
+
+  MY_NUMBER:
+    method: redact
+
+  POSTAL_CODE:
+    method: replace
+    value: "<郵便番号>"
+
+  CREDIT_CARD:
+    method: mask
+    char: "*"
+    from_end: 4
+
+  BANK_ACCOUNT:
+    method: mask
+    char: "*"
+    from_end: 3
+
+  DRIVERS_LICENSE:
+    method: redact
+
+  PASSPORT:
+    method: redact
+
+  DATE:
+    method: replace
+    value: "<日付>"
+
+  TIME:
+    method: replace
+    value: "<時刻>"
+
+  MONEY:
+    method: replace
+    value: "<金額>"
