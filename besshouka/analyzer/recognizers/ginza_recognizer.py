@@ -72,7 +72,7 @@ class GinzaRecognizer(BaseRecognizer):
             return []
 
         if self._nlp is None:
-            self._load_model()
+            self._nlp = self._load_model()
 
         doc = self._nlp(text)
         results = []
