@@ -13,7 +13,7 @@ rich>=13.0,<14.0
 pyyaml>=6.0,<7.0
 
 # Encryption (for encrypt operator)
-cryptography>=42.0,<44.0
+cryptography>=44.0.1,<47.0
 
 # Testing
 pytest>=8.0,<10.0
