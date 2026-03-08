@@ -103,7 +103,8 @@ class GinzaRecognizer(BaseRecognizer):
             if entity_type == "DATE" and not self._validate_date(ent.text):
                 score = 0.2
                 logger.debug(
-                    "Demoted DATE score for non-date span: %r", ent.text,
+                    "Demoted DATE score for non-date span: %r",
+                    ent.text,
                 )
 
             results.append(

@@ -67,6 +67,7 @@ def run(
 
     # Add dedicated recognizers
     from besshouka.analyzer.recognizers.my_number_recognizer import MyNumberRecognizer
+
     recognizers.append(MyNumberRecognizer())
 
     # Try to add GiNZA recognizer
