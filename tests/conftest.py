@@ -41,14 +41,20 @@ def text_with_email():
 
 @pytest.fixture
 def text_with_my_number():
-    """Text containing a My Number (12-digit individual number)."""
-    return "マイナンバーは123456789012です"
+    """Text containing a My Number (12-digit individual number) with valid check digit."""
+    return "マイナンバーは123456789018です"
 
 
 @pytest.fixture
 def text_with_my_number_spaces():
-    """Text containing a My Number with spaces."""
-    return "マイナンバーは1234 5678 9012です"
+    """Text containing a My Number with spaces and valid check digit."""
+    return "マイナンバーは1234 5678 9018です"
+
+
+@pytest.fixture
+def text_with_my_number_dashes():
+    """Text containing a My Number with dashes and valid check digit."""
+    return "マイナンバーは1234-5678-9018です"
 
 
 @pytest.fixture
@@ -212,8 +218,8 @@ def overlapping_results_structured_vs_unstructured():
             "end": 12,
             "entity_type": "MY_NUMBER",
             "score": 1.0,
-            "source": "regex_registry",
-            "text": "123456789012",
+            "source": "my_number",
+            "text": "123456789018",
         },
         {
             "start": 0,
@@ -271,15 +277,9 @@ def recognizer_yaml_content():
             score: 1.0
             source: regex_registry
 
-          - name: my_number
-            entity_type: MY_NUMBER
-            pattern: '\\d{4}\\s?\\d{4}\\s?\\d{4}'
-            score: 1.0
-            source: regex_registry
-
           - name: postal_code
             entity_type: POSTAL_CODE
-            pattern: '\\d{3}-\\d{4}'
+            pattern: '(?<!\\d)〒?\\d{3}-\\d{4}(?!\\d)'
             score: 1.0
             source: regex_registry
     """)
@@ -309,7 +309,8 @@ def operator_yaml_content():
             method: replace
             value: "<メール>"
           MY_NUMBER:
-            method: redact
+            method: replace
+            value: "<マイナンバー>"
           CREDIT_CARD:
             method: mask
             char: "*"

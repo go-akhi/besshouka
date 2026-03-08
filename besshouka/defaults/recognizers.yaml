@@ -27,12 +27,8 @@ recognizers:
     score: 1.0
     source: regex_registry
 
-  # My Number (マイナンバー) — 12-digit individual number
-  - name: my_number
-    entity_type: MY_NUMBER
-    pattern: '\d{4}\s?\d{4}\s?\d{4}'
-    score: 1.0
-    source: regex_registry
+  # My Number (マイナンバー) is handled by the dedicated MyNumberRecognizer
+  # which performs check digit (mod-11) validation after regex matching.
 
   # Japanese postal code (〒XXX-XXXX)
   - name: postal_code

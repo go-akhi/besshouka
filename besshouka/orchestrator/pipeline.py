@@ -13,7 +13,12 @@ from besshouka.orchestrator.context import ProcessingContext
 logger = logging.getLogger(__name__)
 
 
-def run(text: str, recognizer_config: dict, operator_config: dict) -> ProcessingContext:
+def run(
+    text: str,
+    recognizer_config: dict,
+    operator_config: dict,
+    score_threshold: float = 0.5,
+) -> ProcessingContext:
     """Execute the full anonymization pipeline end-to-end.
 
     Steps:
@@ -21,13 +26,17 @@ def run(text: str, recognizer_config: dict, operator_config: dict) -> Processing
         2. Normalize text (NFKC + punctuation cleanup).
         3. Run all recognizers against normalized text.
         4. Resolve conflicts between overlapping detections.
-        5. Anonymize using the operator config.
-        6. Return the completed ProcessingContext.
+        5. Filter out results below the score threshold.
+        6. Anonymize using the operator config.
+        7. Return the completed ProcessingContext.
 
     Args:
         text: Raw input text.
         recognizer_config: Parsed recognizer registry config dict.
         operator_config: Parsed operator rules config dict.
+        score_threshold: Minimum confidence score to anonymize a result.
+            Results below this threshold are detected but not anonymized.
+            Default is 0.5.
 
     Returns:
         ProcessingContext with all fields populated.
@@ -56,6 +65,10 @@ def run(text: str, recognizer_config: dict, operator_config: dict) -> Processing
     else:
         recognizers = []
 
+    # Add dedicated recognizers
+    from besshouka.analyzer.recognizers.my_number_recognizer import MyNumberRecognizer
+    recognizers.append(MyNumberRecognizer())
+
     # Try to add GiNZA recognizer
     try:
         from besshouka.analyzer.recognizers.ginza_recognizer import GinzaRecognizer
@@ -79,8 +92,11 @@ def run(text: str, recognizer_config: dict, operator_config: dict) -> Processing
     # Step 4: Resolve conflicts
     ctx.recognizer_results = resolve_conflicts(all_results)
 
-    # Step 5: Anonymize
+    # Step 5: Filter by score threshold
+    above_threshold = [r for r in ctx.recognizer_results if r.score >= score_threshold]
+
+    # Step 6: Anonymize
     op_config = operator_config.get("operators", {})
-    ctx.engine_result = anonymize(ctx.working_text, ctx.recognizer_results, op_config)
+    ctx.engine_result = anonymize(ctx.working_text, above_threshold, op_config)
 
     return ctx

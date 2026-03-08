@@ -9,7 +9,7 @@ Raw Text → normalize → recognizers → conflict resolution → list[Recogniz
 ```
 
 1. **Normalize** (`normalize.py`) — NFKC normalization (full-width → half-width) and Japanese dash standardization.
-2. **Recognizers** (`recognizers/`) — Each recognizer scans the normalized text independently and returns its detections.
+2. **Recognizers** (`recognizers/`) — Each recognizer scans the normalized text independently and returns its detections. Scores reflect confidence: regex patterns score 1.0, My Number scores 0.4–1.0 depending on context, GiNZA scores are probabilistic (with DATE validation that demotes non-date spans to 0.2).
 3. **Conflict Resolution** (`conflict_resolution.py`) — Overlapping detections from multiple recognizers are resolved into a non-overlapping set.
 
 ## Entity Type Taxonomy
@@ -23,7 +23,7 @@ All recognizers must use these standardized entity types:
 | `ORGANIZATION`   | Company/org names                    |
 | `PHONE_NUMBER`   | Phone numbers (mobile, landline)     |
 | `EMAIL`          | Email addresses                      |
-| `MY_NUMBER`      | マイナンバー (12-digit individual number) |
+| `MY_NUMBER`      | マイナンバー (check digit + context-aware scoring) |
 | `POSTAL_CODE`    | Japanese postal codes (XXX-XXXX)     |
 | `CREDIT_CARD`    | Credit card numbers                  |
 | `BANK_ACCOUNT`   | Bank account numbers                 |

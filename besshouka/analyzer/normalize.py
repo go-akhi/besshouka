@@ -36,9 +36,12 @@ def normalize_text(text: str) -> str:
 def clean_punctuation(text: str) -> str:
     """Standardize Japanese dash-like characters to ASCII hyphen.
 
-    Handles full-width hyphens, katakana prolonged sound marks,
-    wave dashes, and other dash variants commonly used in phone numbers
-    and other formatted data.
+    Handles full-width hyphens, wave dashes, and other dash variants
+    commonly used in phone numbers and other formatted data.
+
+    The katakana prolonged sound mark (ー) is only converted when it
+    appears between digits, preserving it in normal Japanese text
+    (e.g. マイナンバー).
     """
     text = text.translate(_DASH_MAP)
     text = _KANA_DASH_BETWEEN_DIGITS.sub("-", text)

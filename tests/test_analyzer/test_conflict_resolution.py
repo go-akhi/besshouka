@@ -68,23 +68,23 @@ class TestStructuredOverUnstructured:
 
     def test_regex_wins_over_ginza_same_span(self):
         results = [
-            _make_result(0, 12, "MY_NUMBER", 1.0, "regex_registry", "123456789012"),
+            _make_result(0, 12, "MY_NUMBER", 1.0, "my_number", "123456789018"),
             _make_result(0, 12, "NUMBER", 0.60, "ginza_ner", "123456789012"),
         ]
         resolved = resolve_conflicts(results)
         assert len(resolved) == 1
-        assert resolved[0].source == "regex_registry"
+        assert resolved[0].source == "my_number"
         assert resolved[0].entity_type == "MY_NUMBER"
 
-    def test_regex_wins_even_with_lower_length(self):
-        """Structured > unstructured even in partial overlap scenarios."""
+    def test_structured_wins_even_with_lower_score(self):
+        """Structured > unstructured even when scores are close."""
         results = [
-            _make_result(0, 12, "MY_NUMBER", 1.0, "regex_registry", "123456789012"),
+            _make_result(0, 12, "MY_NUMBER", 1.0, "my_number", "123456789018"),
             _make_result(0, 12, "QUANTITY", 0.95, "ginza_ner", "123456789012"),
         ]
         resolved = resolve_conflicts(results)
         assert len(resolved) == 1
-        assert resolved[0].source == "regex_registry"
+        assert resolved[0].source == "my_number"
 
 
 class TestNonOverlapping:

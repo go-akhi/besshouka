@@ -47,13 +47,16 @@ def anonymize(
     recognizers: Optional[Path] = typer.Option(
         None, "--recognizers", help="Custom recognizer registry YAML."
     ),
+    score_threshold: float = typer.Option(
+        0.5, "--threshold", "-t", help="Minimum confidence score to anonymize."
+    ),
 ):
     """Run the full anonymization pipeline on the input text."""
     raw = _read_input(text, input)
     rec_config = _get_recognizer_config(recognizers)
     op_config = _get_operator_config(rules)
 
-    ctx = run(raw, rec_config, op_config)
+    ctx = run(raw, rec_config, op_config, score_threshold=score_threshold)
 
     if output:
         output.write_text(ctx.engine_result.text, encoding="utf-8")
@@ -70,6 +73,9 @@ def analyze(
     recognizers: Optional[Path] = typer.Option(
         None, "--recognizers", help="Custom recognizer registry YAML."
     ),
+    score_threshold: float = typer.Option(
+        0.0, "--threshold", "-t", help="Minimum confidence score to display."
+    ),
 ):
     """Run the analyzer only and show detected PII entities."""
     raw = _read_input(text, input)
@@ -79,7 +85,9 @@ def analyze(
 
     ctx = run(raw, rec_config, op_config)
 
-    if not ctx.recognizer_results:
+    filtered = [r for r in ctx.recognizer_results if r.score >= score_threshold]
+
+    if not filtered:
         console.print("[dim]No PII entities detected.[/dim]")
         return
 
@@ -93,7 +101,7 @@ def analyze(
         table.add_column("Score", justify="right", style="green")
         table.add_column("Source", style="magenta")
 
-    for r in ctx.recognizer_results:
+    for r in filtered:
         row = [r.entity_type, r.text, str(r.start), str(r.end)]
         if explain:
             row.extend([f"{r.score:.2f}", r.source])

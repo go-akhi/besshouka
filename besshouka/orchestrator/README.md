@@ -5,15 +5,16 @@ The orchestrator is the only module that knows both the analyzer and anonymizer 
 ## Pipeline Execution Order
 
 ```python
-ctx = run(text, recognizer_config, operator_config)
+ctx = run(text, recognizer_config, operator_config, score_threshold=0.5)
 ```
 
 1. Create `ProcessingContext` with original text.
 2. **Normalize** — NFKC normalization + Japanese dash cleanup.
-3. **Recognize** — Run all recognizers (regex from YAML + GiNZA NER).
+3. **Recognize** — Run all recognizers (regex from YAML + My Number + GiNZA NER).
 4. **Resolve conflicts** — Eliminate overlapping detections.
-5. **Anonymize** — Apply operators per the operator config.
-6. Return the completed `ProcessingContext`.
+5. **Filter by confidence** — Only results with `score >= score_threshold` proceed to anonymization. Lower-confidence detections remain in `ctx.recognizer_results` for inspection but are not anonymized.
+6. **Anonymize** — Apply operators per the operator config.
+7. Return the completed `ProcessingContext`.
 
 ## ProcessingContext
 
@@ -24,7 +25,7 @@ The shared state object that travels through the pipeline:
 | `original_text`      | `str`                    | Step 1 (init)   |
 | `working_text`       | `str`                    | Step 2 (normalize) |
 | `recognizer_results` | `list[RecognizerResult]` | Step 4 (resolve) |
-| `engine_result`      | `EngineResult`           | Step 5 (anonymize) |
+| `engine_result`      | `EngineResult`           | Step 6 (anonymize) |
 | `metadata`           | `dict`                   | Caller (optional) |
 
 ## Error Handling
@@ -42,7 +43,8 @@ from besshouka.orchestrator.pipeline import run
 rec_config = load_recognizer_config("recognizers.yaml")
 op_config = load_operator_config("operators.yaml")
 
-ctx = run("田中太郎の電話は090-1234-5678です", rec_config, op_config)
+ctx = run("田中太郎の電話は090-1234-5678です", rec_config, op_config,
+          score_threshold=0.5)
 
 # Anonymized text
 print(ctx.engine_result.text)
