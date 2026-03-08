@@ -2,6 +2,8 @@
 
 A local-first Japanese PII anonymization engine. Besshouka detects personally identifiable information (PII), payment card data (PCI), and protected health information (PHI) in Japanese text and transforms it using configurable rules — all without sending data to any external service.
 
+> **Note:** Besshouka is in early development (alpha). It is not yet recommended for production use. Contributions to improve accuracy, coverage, and robustness are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Why Besshouka?
 
 - **Japanese-native** — built specifically for Japanese data patterns: マイナンバー, Japanese phone formats, postal codes, full-width character handling, and GiNZA-powered NER for names, organizations, and locations.
