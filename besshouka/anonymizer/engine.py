@@ -1,16 +1,15 @@
 """Anonymization engine \u2014 applies operators to detected PII using a reverse-loop algorithm."""
 
-from besshouka.models.recognizer_result import RecognizerResult
-from besshouka.models.engine_result import OperatorResult, EngineResult
-from besshouka.anonymizer.operators.replace import ReplaceOperator
+from besshouka.anonymizer.operators.base import BaseOperator
+from besshouka.anonymizer.operators.custom import CustomOperator
+from besshouka.anonymizer.operators.encrypt import EncryptOperator
+from besshouka.anonymizer.operators.hash import HashOperator
+from besshouka.anonymizer.operators.keep import KeepOperator
 from besshouka.anonymizer.operators.mask import MaskOperator
 from besshouka.anonymizer.operators.redact import RedactOperator
-from besshouka.anonymizer.operators.hash import HashOperator
-from besshouka.anonymizer.operators.encrypt import EncryptOperator
-from besshouka.anonymizer.operators.keep import KeepOperator
-from besshouka.anonymizer.operators.custom import CustomOperator
-from besshouka.anonymizer.operators.base import BaseOperator
-
+from besshouka.anonymizer.operators.replace import ReplaceOperator
+from besshouka.models.engine_result import EngineResult, OperatorResult
+from besshouka.models.recognizer_result import RecognizerResult
 
 _OPERATORS: dict[str, BaseOperator] = {
     "replace": ReplaceOperator(),

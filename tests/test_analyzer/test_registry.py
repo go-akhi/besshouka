@@ -2,8 +2,8 @@
 
 import pytest
 
-from besshouka.analyzer.registry import load_recognizers, get_all_recognizers
 from besshouka.analyzer.recognizers.regex_recognizer import RegexRecognizer
+from besshouka.analyzer.registry import get_all_recognizers, load_recognizers
 
 
 class TestLoadRecognizers:

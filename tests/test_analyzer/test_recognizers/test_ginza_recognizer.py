@@ -72,7 +72,10 @@ class TestGinzaLabelMapping:
         """All entity_type values should be from the standardized taxonomy."""
         text = "田中太郎は東京都で株式会社ABCに勤めています"
         results = self.recognizer.recognize(text)
-        valid_types = {"PERSON", "LOCATION", "ORGANIZATION", "DATE", "TIME", "MONEY", "PERCENT", "QUANTITY"}
+        valid_types = {
+            "PERSON", "LOCATION", "ORGANIZATION", "DATE",
+            "TIME", "MONEY", "PERCENT", "QUANTITY",
+        }
         for r in results:
             assert r.entity_type in valid_types, f"Unexpected entity type: {r.entity_type}"
 

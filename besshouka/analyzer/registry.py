@@ -6,7 +6,6 @@ from besshouka.analyzer.recognizers.base import BaseRecognizer
 from besshouka.analyzer.recognizers.regex_recognizer import RegexRecognizer
 from besshouka.config.loader import load_recognizer_config
 
-
 _registry: list[BaseRecognizer] = []
 
 

@@ -3,7 +3,6 @@
 import re
 import unicodedata
 
-
 # Mapping of Japanese dash-like characters to standard ASCII hyphen.
 # Note: ー (U+30FC katakana prolonged sound mark) is NOT included here
 # because it is a valid katakana character (e.g. マイナンバー). It is only

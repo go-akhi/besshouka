@@ -1,6 +1,6 @@
 """Tests for OperatorResult and EngineResult data models."""
 
-from besshouka.models.engine_result import OperatorResult, EngineResult
+from besshouka.models.engine_result import EngineResult, OperatorResult
 
 
 class TestOperatorResultCreation:

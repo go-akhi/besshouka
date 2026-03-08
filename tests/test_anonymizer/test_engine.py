@@ -1,8 +1,8 @@
 """Tests for the anonymization engine."""
 
 from besshouka.anonymizer.engine import anonymize
-from besshouka.models.recognizer_result import RecognizerResult
 from besshouka.models.engine_result import EngineResult
+from besshouka.models.recognizer_result import RecognizerResult
 
 
 def _make_result(start, end, entity_type, score, source, text):

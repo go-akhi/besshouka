@@ -5,11 +5,10 @@ The only module that knows both the analyzer and anonymizer exist.
 
 import logging
 
-from besshouka.orchestrator.context import ProcessingContext
-from besshouka.analyzer.normalize import normalize_text, clean_punctuation
-from besshouka.analyzer.registry import load_recognizers, get_all_recognizers
 from besshouka.analyzer.conflict_resolution import resolve_conflicts
+from besshouka.analyzer.normalize import clean_punctuation, normalize_text
 from besshouka.anonymizer.engine import anonymize
+from besshouka.orchestrator.context import ProcessingContext
 
 logger = logging.getLogger(__name__)
 

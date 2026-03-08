@@ -1,9 +1,8 @@
 """Shared fixtures for Besshouka test suite."""
 
-import pytest
 import textwrap
-from pathlib import Path
 
+import pytest
 
 # ---------------------------------------------------------------------------
 # Sample Japanese texts with known PII

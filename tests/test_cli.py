@@ -1,10 +1,8 @@
 """Tests for the Typer CLI interface."""
 
-import pytest
 from typer.testing import CliRunner
 
 from besshouka.cli import app
-
 
 runner = CliRunner()
 

@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass, field
 
-from besshouka.models.recognizer_result import RecognizerResult
 from besshouka.models.engine_result import EngineResult
+from besshouka.models.recognizer_result import RecognizerResult
 
 
 @dataclass
