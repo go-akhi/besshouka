@@ -65,7 +65,7 @@ def anonymize(
         replacement = operator.operate(result.text, config)
 
         # Replace the span in the text
-        anonymized = anonymized[:result.start] + replacement + anonymized[result.end:]
+        anonymized = anonymized[: result.start] + replacement + anonymized[result.end :]
 
         audit_items.append(
             OperatorResult(

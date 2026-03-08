@@ -67,11 +67,13 @@ def run(
 
     # Add dedicated recognizers
     from besshouka.analyzer.recognizers.my_number_recognizer import MyNumberRecognizer
+
     recognizers.append(MyNumberRecognizer())
 
     # Try to add GiNZA recognizer
     try:
         from besshouka.analyzer.recognizers.ginza_recognizer import GinzaRecognizer
+
         recognizers.append(GinzaRecognizer())
     except Exception as e:
         logger.warning("GiNZA recognizer unavailable, running regex-only: %s", e)
@@ -84,7 +86,8 @@ def run(
         except Exception as e:
             logger.warning(
                 "Recognizer '%s' failed, skipping: %s",
-                recognizer.name, e,
+                recognizer.name,
+                e,
             )
 
     # Step 4: Resolve conflicts

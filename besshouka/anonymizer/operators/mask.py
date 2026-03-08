@@ -4,7 +4,6 @@ from besshouka.anonymizer.operators.base import BaseOperator
 
 
 class MaskOperator(BaseOperator):
-
     def operate(self, text: str, params: dict) -> str:
         char = params.get("char", "*")
         from_end = min(params.get("from_end", 0), len(text))

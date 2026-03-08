@@ -45,10 +45,15 @@ def anonymize(
     output: Optional[Path] = typer.Option(None, "--output", "-o", help="Output file path."),
     rules: Optional[Path] = typer.Option(None, "--rules", "-r", help="Custom operator rules YAML."),
     recognizers: Optional[Path] = typer.Option(
-        None, "--recognizers", help="Custom recognizer registry YAML.",
+        None,
+        "--recognizers",
+        help="Custom recognizer registry YAML.",
     ),
     score_threshold: float = typer.Option(
-        0.5, "--threshold", "-t", help="Minimum confidence score.",
+        0.5,
+        "--threshold",
+        "-t",
+        help="Minimum confidence score.",
     ),
 ):
     """Run the full anonymization pipeline on the input text."""
@@ -71,10 +76,15 @@ def analyze(
     input: Optional[Path] = typer.Option(None, "--input", "-i", help="Input file path."),
     explain: bool = typer.Option(False, "--explain", "-e", help="Show source and score reasoning."),
     recognizers: Optional[Path] = typer.Option(
-        None, "--recognizers", help="Custom recognizer registry YAML.",
+        None,
+        "--recognizers",
+        help="Custom recognizer registry YAML.",
     ),
     score_threshold: float = typer.Option(
-        0.0, "--threshold", "-t", help="Minimum confidence score.",
+        0.0,
+        "--threshold",
+        "-t",
+        help="Minimum confidence score.",
     ),
 ):
     """Run the analyzer only and show detected PII entities."""

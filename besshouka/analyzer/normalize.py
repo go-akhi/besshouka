@@ -7,15 +7,17 @@ import unicodedata
 # Note: ー (U+30FC katakana prolonged sound mark) is NOT included here
 # because it is a valid katakana character (e.g. マイナンバー). It is only
 # converted to a hyphen when it appears between digits (see clean_punctuation).
-_DASH_MAP = str.maketrans({
-    "\uFF0D": "-",  # － Full-width hyphen-minus
-    "\u301C": "-",  # 〜 Wave dash
-    "\uFF5E": "-",  # ～ Full-width tilde
-    "\u2012": "-",  # ‒ Figure dash
-    "\u2013": "-",  # – En dash
-    "\u2014": "-",  # — Em dash
-    "\u2015": "-",  # ― Horizontal bar
-})
+_DASH_MAP = str.maketrans(
+    {
+        "\uff0d": "-",  # － Full-width hyphen-minus
+        "\u301c": "-",  # 〜 Wave dash
+        "\uff5e": "-",  # ～ Full-width tilde
+        "\u2012": "-",  # ‒ Figure dash
+        "\u2013": "-",  # – En dash
+        "\u2014": "-",  # — Em dash
+        "\u2015": "-",  # ― Horizontal bar
+    }
+)
 
 # Katakana prolonged sound mark used as a digit separator (e.g. ０９０ー１２３４ー５６７８)
 _KANA_DASH_BETWEEN_DIGITS = re.compile(r"(?<=\d)\u30FC(?=\d)")
