@@ -1,11 +1,15 @@
 """GiNZA/spaCy NER recognizer wrapper."""
 
 import logging
+import re
 
 from besshouka.analyzer.recognizers.base import BaseRecognizer
 from besshouka.models.recognizer_result import RecognizerResult
 
 logger = logging.getLogger(__name__)
+
+# Kanji and tokens that indicate a genuine date
+_DATE_MARKERS = re.compile(r"[年月日時分秒曜]|元年|令和|平成|昭和|大正|明治")
 
 
 # Mapping from GiNZA/OntoNotes labels to standardized entity types
@@ -66,6 +70,16 @@ class GinzaRecognizer(BaseRecognizer):
         """
         return _LABEL_MAP.get(label)
 
+    @staticmethod
+    def _validate_date(span_text: str) -> bool:
+        """Check if a DATE span contains date-specific markers.
+
+        Returns True if the span looks like a real date (contains kanji
+        like 年/月/日 or era names). Returns False for pure digit strings
+        or other non-date text that GiNZA mislabelled.
+        """
+        return bool(_DATE_MARKERS.search(span_text))
+
     def recognize(self, text: str) -> list[RecognizerResult]:
         """Run GiNZA NER on the text and return detected entities."""
         if not text:
@@ -83,12 +97,21 @@ class GinzaRecognizer(BaseRecognizer):
                 logger.debug("Skipping unmapped GiNZA label: %s", ent.label_)
                 continue
 
+            score = round(ent.kb_id_ and float(ent.kb_id_) or 0.85, 2)
+
+            # Demote DATE entities that lack date-specific markers
+            if entity_type == "DATE" and not self._validate_date(ent.text):
+                score = 0.2
+                logger.debug(
+                    "Demoted DATE score for non-date span: %r", ent.text,
+                )
+
             results.append(
                 RecognizerResult(
                     start=ent.start_char,
                     end=ent.end_char,
                     entity_type=entity_type,
-                    score=round(ent.kb_id_ and float(ent.kb_id_) or 0.85, 2),
+                    score=score,
                     source="ginza_ner",
                     text=ent.text,
                 )

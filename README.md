@@ -28,6 +28,20 @@ besshouka anonymize "田中太郎の電話番号は090-1234-5678です"
 besshouka analyze --explain "田中太郎の電話番号は090-1234-5678です"
 ```
 
+### Adjust confidence threshold
+
+Both commands support `--threshold` / `-t` to filter by confidence score:
+
+```bash
+# Anonymize: only anonymize detections with confidence >= threshold (default: 0.5)
+besshouka anonymize --threshold 0.3 "番号は123456789018です"
+
+# Analyze: only display detections with confidence >= threshold (default: 0.0)
+besshouka analyze --threshold 0.5 --explain "マイナンバーは123456789018です"
+```
+
+Detections below the threshold are still detected internally but excluded from output. For example, a 12-digit number matching the My Number check digit but lacking context keywords scores 0.4 and is left untouched at the default anonymization threshold.
+
 ### Use custom rules
 
 ```bash
@@ -47,7 +61,8 @@ from besshouka.orchestrator.pipeline import run
 rec_config = load_recognizer_config("path/to/recognizers.yaml")
 op_config = load_operator_config("path/to/operators.yaml")
 
-ctx = run("田中太郎の電話番号は090-1234-5678です", rec_config, op_config)
+ctx = run("田中太郎の電話番号は090-1234-5678です", rec_config, op_config,
+          score_threshold=0.5)
 
 print(ctx.engine_result.text)   # anonymized text
 print(ctx.engine_result.items)  # audit trail
@@ -75,7 +90,7 @@ Each module has its own README with extension guides. See the [`besshouka/`](bes
 | Landline phone    | `PHONE_NUMBER`    |
 | Toll-free phone   | `PHONE_NUMBER`    |
 | Email address     | `EMAIL`           |
-| マイナンバー       | `MY_NUMBER`       |
+| マイナンバー       | `MY_NUMBER` (check digit + context-aware scoring) |
 | Postal code       | `POSTAL_CODE`     |
 | Credit card       | `CREDIT_CARD`     |
 | Bank account      | `BANK_ACCOUNT`    |

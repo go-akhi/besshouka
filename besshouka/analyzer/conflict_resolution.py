@@ -9,7 +9,7 @@ Rules (in priority order):
 from besshouka.models.recognizer_result import RecognizerResult
 
 
-_STRUCTURED_SOURCES = {"regex_registry", "custom"}
+_STRUCTURED_SOURCES = {"regex_registry", "my_number", "custom"}
 
 
 def _spans_overlap(a: RecognizerResult, b: RecognizerResult) -> bool:

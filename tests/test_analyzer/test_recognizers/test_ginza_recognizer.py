@@ -99,6 +99,37 @@ class TestGinzaNoEntities:
         assert results == []
 
 
+@pytest.mark.slow
+class TestGinzaDateValidation:
+    """Test that DATE entities without date markers are demoted."""
+
+    def setup_method(self):
+        self.recognizer = GinzaRecognizer()
+
+    def test_real_date_keeps_score(self):
+        results = self.recognizer.recognize("2024年3月8日に会議があります")
+        date_results = [r for r in results if r.entity_type == "DATE"]
+        for r in date_results:
+            assert r.score > 0.5
+
+    def test_digit_string_mislabelled_as_date_demoted(self):
+        """A pure digit string labelled DATE should have score dropped to 0.2."""
+        results = self.recognizer.recognize("123456789012345（15桁の管理用番号）")
+        date_results = [r for r in results if r.entity_type == "DATE"]
+        for r in date_results:
+            assert r.score <= 0.2, f"Expected demoted score for non-date span: {r.text!r}"
+
+    def test_validate_date_with_kanji(self):
+        assert self.recognizer._validate_date("2024年3月") is True
+        assert self.recognizer._validate_date("令和6年") is True
+        assert self.recognizer._validate_date("3月8日") is True
+
+    def test_validate_date_without_kanji(self):
+        assert self.recognizer._validate_date("123456789012345") is False
+        assert self.recognizer._validate_date("12345") is False
+        assert self.recognizer._validate_date("abcdef") is False
+
+
 class TestGinzaModelUnavailable:
     """Test graceful handling when GiNZA model is not available."""
 

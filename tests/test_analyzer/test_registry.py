@@ -11,7 +11,7 @@ class TestLoadRecognizers:
 
     def test_load_valid_yaml(self, recognizer_yaml_file):
         recognizers = load_recognizers(recognizer_yaml_file)
-        assert len(recognizers) == 4  # phone, email, my_number, postal_code
+        assert len(recognizers) == 3  # phone, email, postal_code
 
     def test_each_entry_is_regex_recognizer(self, recognizer_yaml_file):
         recognizers = load_recognizers(recognizer_yaml_file)
@@ -23,7 +23,6 @@ class TestLoadRecognizers:
         names = {r.name for r in recognizers}
         assert "japanese_phone" in names
         assert "email" in names
-        assert "my_number" in names
         assert "postal_code" in names
 
     def test_recognizer_entity_types(self, recognizer_yaml_file):
@@ -31,7 +30,6 @@ class TestLoadRecognizers:
         types = {r.entity_type for r in recognizers}
         assert "PHONE_NUMBER" in types
         assert "EMAIL" in types
-        assert "MY_NUMBER" in types
         assert "POSTAL_CODE" in types
 
     def test_recognizers_can_match(self, recognizer_yaml_file):
@@ -62,7 +60,7 @@ class TestGetAllRecognizers:
         load_recognizers(recognizer_yaml_file)
         all_recognizers = get_all_recognizers()
         regex_recognizers = [r for r in all_recognizers if isinstance(r, RegexRecognizer)]
-        assert len(regex_recognizers) >= 4
+        assert len(regex_recognizers) >= 3
 
     def test_returns_list(self, recognizer_yaml_file):
         load_recognizers(recognizer_yaml_file)

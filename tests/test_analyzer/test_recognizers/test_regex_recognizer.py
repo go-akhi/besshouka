@@ -84,33 +84,6 @@ class TestEmailDetection:
         assert text[results[0].start:results[0].end] == "tanaka@example.com"
 
 
-class TestMyNumberDetection:
-    """Test My Number (マイナンバー) regex matching."""
-
-    def setup_method(self):
-        self.recognizer = RegexRecognizer(
-            name="my_number",
-            entity_type="MY_NUMBER",
-            pattern=r"\d{4}\s?\d{4}\s?\d{4}",
-            score=1.0,
-            source="regex_registry",
-        )
-
-    def test_my_number_no_spaces(self):
-        results = self.recognizer.recognize("マイナンバーは123456789012です")
-        assert len(results) == 1
-        assert results[0].text == "123456789012"
-
-    def test_my_number_with_spaces(self):
-        results = self.recognizer.recognize("マイナンバーは1234 5678 9012です")
-        assert len(results) == 1
-        assert results[0].text == "1234 5678 9012"
-
-    def test_no_match(self):
-        results = self.recognizer.recognize("今日は2024年3月7日です")
-        assert len(results) == 0
-
-
 class TestPostalCodeDetection:
     """Test postal code regex matching."""
 
@@ -118,7 +91,7 @@ class TestPostalCodeDetection:
         self.recognizer = RegexRecognizer(
             name="postal_code",
             entity_type="POSTAL_CODE",
-            pattern=r"\d{3}-\d{4}",
+            pattern=r"(?<!\d)〒?\d{3}-\d{4}(?!\d)",
             score=1.0,
             source="regex_registry",
         )
@@ -129,8 +102,18 @@ class TestPostalCodeDetection:
         assert results[0].text == "100-0001"
         assert results[0].entity_type == "POSTAL_CODE"
 
+    def test_postal_code_with_symbol(self):
+        results = self.recognizer.recognize("〒100-0001")
+        assert len(results) == 1
+        assert results[0].text == "〒100-0001"
+
     def test_no_match(self):
         results = self.recognizer.recognize("番号は12345です")
+        assert len(results) == 0
+
+    def test_no_false_positive_in_longer_number(self):
+        """Digits before or after mean it's not a postal code."""
+        results = self.recognizer.recognize("1234-5678-9012")
         assert len(results) == 0
 
 

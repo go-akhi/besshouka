@@ -21,7 +21,8 @@ operators:
     value: "<メール>"
 
   MY_NUMBER:
-    method: redact
+    method: replace
+    value: "<マイナンバー>"
 
   POSTAL_CODE:
     method: replace

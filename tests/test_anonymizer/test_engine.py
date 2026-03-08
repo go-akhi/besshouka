@@ -36,13 +36,13 @@ class TestSingleEntityAnonymization:
         assert engine_result.text.endswith("さんに会いました")
 
     def test_redact_my_number(self):
-        text = "マイナンバーは123456789012です"
-        results = [_make_result(7, 19, "MY_NUMBER", 1.0, "regex_registry", "123456789012")]
+        text = "マイナンバーは123456789018です"
+        results = [_make_result(7, 19, "MY_NUMBER", 1.0, "my_number", "123456789018")]
         config = {"MY_NUMBER": {"method": "redact"}}
 
         engine_result = anonymize(text, results, config)
 
-        assert "123456789012" not in engine_result.text
+        assert "123456789018" not in engine_result.text
         assert engine_result.text == "マイナンバーはです"
 
     def test_mask_phone_number(self):

@@ -10,7 +10,7 @@ class TestLoadRecognizerConfig:
     def test_load_valid_config(self, recognizer_yaml_file):
         config = load_recognizer_config(recognizer_yaml_file)
         assert "recognizers" in config
-        assert len(config["recognizers"]) == 4
+        assert len(config["recognizers"]) == 3
 
     def test_each_entry_has_required_fields(self, recognizer_yaml_file):
         config = load_recognizer_config(recognizer_yaml_file)
