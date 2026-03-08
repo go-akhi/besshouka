@@ -177,14 +177,16 @@ class TestContextKeywords:
         assert len(results) == 1
 
     def test_keyword_too_far_before(self):
-        """Keyword more than 10 chars before number — low confidence."""
-        results = self.recognizer.recognize("マイナンバーですが、それはまた別の話で、番号は123456789018です")
+        """Keyword more than 10 chars before number."""
+        text = "マイナンバーですが、それはまた別の話で、番号は123456789018です"
+        results = self.recognizer.recognize(text)
         assert len(results) == 1
         assert results[0].score == 0.4
 
     def test_keyword_too_far_after(self):
-        """Keyword more than 10 chars after number — low confidence."""
-        results = self.recognizer.recognize("123456789018ですが、それはまた別の話で、マイナンバーです")
+        """Keyword more than 10 chars after number."""
+        text = "123456789018ですが、それはまた別の話で、マイナンバーです"
+        results = self.recognizer.recognize(text)
         assert len(results) == 1
         assert results[0].score == 0.4
 
