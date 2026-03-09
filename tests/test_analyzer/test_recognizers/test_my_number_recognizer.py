@@ -95,13 +95,13 @@ class TestMyNumberRecognition:
         text = "マイナンバーは123456789018です"
         results = self.recognizer.recognize(text)
         assert len(results) == 1
-        assert text[results[0].start:results[0].end] == "123456789018"
+        assert text[results[0].start : results[0].end] == "123456789018"
 
     def test_correct_offsets_with_dashes(self):
         text = "マイナンバーは1234-5678-9018です"
         results = self.recognizer.recognize(text)
         assert len(results) == 1
-        assert text[results[0].start:results[0].end] == "1234-5678-9018"
+        assert text[results[0].start : results[0].end] == "1234-5678-9018"
 
     def test_no_match_in_plain_text(self):
         results = self.recognizer.recognize("今日はいい天気ですね")

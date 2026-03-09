@@ -57,6 +57,7 @@ def anonymize(
     op_config = _get_operator_config(rules)
 
     ctx = run(raw, rec_config, op_config, score_threshold=score_threshold)
+    assert ctx.engine_result is not None
 
     if output:
         output.write_text(ctx.engine_result.text, encoding="utf-8")

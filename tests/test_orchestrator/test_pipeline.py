@@ -15,6 +15,7 @@ class TestFullPipeline:
         ctx = run("電話番号は090-1234-5678です", rec_config, op_config)
 
         assert isinstance(ctx, ProcessingContext)
+        assert ctx.engine_result is not None
         assert "090-1234-5678" not in ctx.engine_result.text
         assert ctx.original_text == "電話番号は090-1234-5678です"
 
@@ -25,6 +26,7 @@ class TestFullPipeline:
         op_config = load_operator_config(operator_yaml_file)
 
         ctx = run("今日はいい天気ですね", rec_config, op_config)
+        assert ctx.engine_result is not None
 
         assert ctx.engine_result.text == "今日はいい天気ですね"
         assert ctx.engine_result.items == []
@@ -36,6 +38,7 @@ class TestFullPipeline:
         op_config = load_operator_config(operator_yaml_file)
 
         ctx = run("メールはtanaka@example.comです", rec_config, op_config)
+        assert ctx.engine_result is not None
 
         assert "tanaka@example.com" not in ctx.engine_result.text
         assert "<メール>" in ctx.engine_result.text
@@ -66,6 +69,7 @@ class TestGracefulDegradation:
 
         # Phone number should still be detected by regex even without GiNZA
         ctx = run("電話番号は090-1234-5678です", rec_config, op_config)
+        assert ctx.engine_result is not None
 
         assert "090-1234-5678" not in ctx.engine_result.text
 
