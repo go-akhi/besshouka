@@ -1,19 +1,26 @@
 """Text normalization for Japanese input before PII recognition."""
 
+import re
 import unicodedata
 
-
 # Mapping of Japanese dash-like characters to standard ASCII hyphen
-_DASH_MAP = str.maketrans({
-    "\uFF0D": "-",  # － Full-width hyphen-minus
-    "\u30FC": "-",  # ー Katakana prolonged sound mark
-    "\u301C": "-",  # 〜 Wave dash
-    "\uFF5E": "-",  # ～ Full-width tilde
-    "\u2012": "-",  # ‒ Figure dash
-    "\u2013": "-",  # – En dash
-    "\u2014": "-",  # — Em dash
-    "\u2015": "-",  # ― Horizontal bar
-})
+# NOTE: Katakana prolonged sound mark (ー U+30FC) is intentionally excluded
+# here — it is valid in katakana words (マイナンバー, メール, カード).
+# It is only converted to hyphen when it appears between digits (see below).
+_DASH_MAP = str.maketrans(
+    {
+        "\uff0d": "-",  # － Full-width hyphen-minus
+        "\u301c": "-",  # 〜 Wave dash
+        "\uff5e": "-",  # ～ Full-width tilde
+        "\u2012": "-",  # ‒ Figure dash
+        "\u2013": "-",  # – En dash
+        "\u2014": "-",  # — Em dash
+        "\u2015": "-",  # ― Horizontal bar
+    }
+)
+
+# Katakana prolonged sound mark used as a digit separator (e.g. 090ー1234)
+_KANA_DASH_BETWEEN_DIGITS = re.compile(r"(?<=\d)\u30FC(?=\d)")
 
 
 def normalize_text(text: str) -> str:
@@ -33,4 +40,6 @@ def clean_punctuation(text: str) -> str:
     wave dashes, and other dash variants commonly used in phone numbers
     and other formatted data.
     """
-    return text.translate(_DASH_MAP)
+    text = text.translate(_DASH_MAP)
+    text = _KANA_DASH_BETWEEN_DIGITS.sub("-", text)
+    return text

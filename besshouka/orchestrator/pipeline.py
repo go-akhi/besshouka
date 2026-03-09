@@ -5,11 +5,10 @@ The only module that knows both the analyzer and anonymizer exist.
 
 import logging
 
-from besshouka.orchestrator.context import ProcessingContext
-from besshouka.analyzer.normalize import normalize_text, clean_punctuation
-from besshouka.analyzer.registry import load_recognizers, get_all_recognizers
 from besshouka.analyzer.conflict_resolution import resolve_conflicts
+from besshouka.analyzer.normalize import clean_punctuation, normalize_text
 from besshouka.anonymizer.engine import anonymize
+from besshouka.orchestrator.context import ProcessingContext
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +59,7 @@ def run(text: str, recognizer_config: dict, operator_config: dict) -> Processing
     # Try to add GiNZA recognizer
     try:
         from besshouka.analyzer.recognizers.ginza_recognizer import GinzaRecognizer
+
         recognizers.append(GinzaRecognizer())
     except Exception as e:
         logger.warning("GiNZA recognizer unavailable, running regex-only: %s", e)
@@ -72,7 +72,8 @@ def run(text: str, recognizer_config: dict, operator_config: dict) -> Processing
         except Exception as e:
             logger.warning(
                 "Recognizer '%s' failed, skipping: %s",
-                recognizer.name, e,
+                recognizer.name,
+                e,
             )
 
     # Step 4: Resolve conflicts

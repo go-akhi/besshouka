@@ -4,7 +4,6 @@ from besshouka.orchestrator.context import ProcessingContext
 
 
 class TestProcessingContextCreation:
-
     def test_create_with_text(self):
         ctx = ProcessingContext(original_text="田中太郎さんに会いました")
         assert ctx.original_text == "田中太郎さんに会いました"

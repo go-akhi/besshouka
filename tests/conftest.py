@@ -1,13 +1,13 @@
 """Shared fixtures for Besshouka test suite."""
 
-import pytest
 import textwrap
-from pathlib import Path
 
+import pytest
 
 # ---------------------------------------------------------------------------
 # Sample Japanese texts with known PII
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def text_with_person_name():
@@ -109,6 +109,7 @@ def text_mixed_scripts():
 # Pre-built RecognizerResult-like dicts (used before the class exists)
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def sample_recognizer_result_person():
     """A sample result for a detected person name."""
@@ -154,6 +155,7 @@ def sample_recognizer_result_email():
 # ---------------------------------------------------------------------------
 # Overlapping results for conflict resolution tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def overlapping_results_nested():
@@ -250,6 +252,7 @@ def non_overlapping_results():
 # ---------------------------------------------------------------------------
 # YAML configuration fixtures
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def recognizer_yaml_content():
@@ -363,6 +366,7 @@ def missing_fields_yaml_file(tmp_path, missing_fields_yaml_content):
 # ---------------------------------------------------------------------------
 # Custom operator function (for testing custom.py operator)
 # ---------------------------------------------------------------------------
+
 
 def sample_custom_function(text: str, params: dict) -> str:
     """A sample custom operator function that reverses the text."""

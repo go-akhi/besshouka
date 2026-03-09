@@ -6,7 +6,6 @@ from besshouka.anonymizer.operators.base import BaseOperator
 
 
 class CustomOperator(BaseOperator):
-
     def operate(self, text: str, params: dict) -> str:
         func_path = params["function"]
         module_path, func_name = func_path.rsplit(".", 1)

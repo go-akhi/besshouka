@@ -32,7 +32,7 @@ class TestGinzaPersonDetection:
         text = "田中太郎さんに会いました"
         results = self.recognizer.recognize(text)
         for r in results:
-            assert text[r.start:r.end] == r.text
+            assert text[r.start : r.end] == r.text
 
 
 @pytest.mark.slow
@@ -72,7 +72,16 @@ class TestGinzaLabelMapping:
         """All entity_type values should be from the standardized taxonomy."""
         text = "田中太郎は東京都で株式会社ABCに勤めています"
         results = self.recognizer.recognize(text)
-        valid_types = {"PERSON", "LOCATION", "ORGANIZATION", "DATE", "TIME", "MONEY", "PERCENT", "QUANTITY"}
+        valid_types = {
+            "PERSON",
+            "LOCATION",
+            "ORGANIZATION",
+            "DATE",
+            "TIME",
+            "MONEY",
+            "PERCENT",
+            "QUANTITY",
+        }
         for r in results:
             assert r.entity_type in valid_types, f"Unexpected entity type: {r.entity_type}"
 
@@ -108,7 +117,8 @@ class TestGinzaModelUnavailable:
         recognizer = GinzaRecognizer()
         # Force model loading to fail
         monkeypatch.setattr(
-            recognizer, "_load_model",
+            recognizer,
+            "_load_model",
             lambda: (_ for _ in ()).throw(OSError("Model not found")),
         )
         # Should either return empty results or raise a clear error

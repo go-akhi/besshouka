@@ -4,7 +4,6 @@ from pathlib import Path
 
 import yaml
 
-
 _REQUIRED_RECOGNIZER_FIELDS = {"name", "entity_type", "pattern", "score"}
 
 

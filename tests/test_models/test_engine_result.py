@@ -1,6 +1,6 @@
 """Tests for OperatorResult and EngineResult data models."""
 
-from besshouka.models.engine_result import OperatorResult, EngineResult
+from besshouka.models.engine_result import EngineResult, OperatorResult
 
 
 class TestOperatorResultCreation:
@@ -30,7 +30,7 @@ class TestOperatorResultCreation:
             original_text="田中太郎",
         )
         anonymized = "<氏名>さんに会いました"
-        assert anonymized[result.start:result.end] == "<氏名>"
+        assert anonymized[result.start : result.end] == "<氏名>"
 
 
 class TestEngineResultCreation:
@@ -63,12 +63,18 @@ class TestEngineResultCreation:
     def test_multiple_items(self):
         items = [
             OperatorResult(
-                entity_type="PERSON", start=0, end=4,
-                operator="replace", original_text="田中太郎",
+                entity_type="PERSON",
+                start=0,
+                end=4,
+                operator="replace",
+                original_text="田中太郎",
             ),
             OperatorResult(
-                entity_type="PHONE_NUMBER", start=10, end=23,
-                operator="mask", original_text="090-1234-5678",
+                entity_type="PHONE_NUMBER",
+                start=10,
+                end=23,
+                operator="mask",
+                original_text="090-1234-5678",
             ),
         ]
         engine_result = EngineResult(

@@ -48,7 +48,7 @@ class TestPhoneNumberDetection:
         text = "電話番号は090-1234-5678です"
         results = self.recognizer.recognize(text)
         assert len(results) == 1
-        assert text[results[0].start:results[0].end] == "090-1234-5678"
+        assert text[results[0].start : results[0].end] == "090-1234-5678"
 
 
 class TestEmailDetection:
@@ -81,7 +81,7 @@ class TestEmailDetection:
     def test_correct_offsets(self):
         text = "メールはtanaka@example.comです"
         results = self.recognizer.recognize(text)
-        assert text[results[0].start:results[0].end] == "tanaka@example.com"
+        assert text[results[0].start : results[0].end] == "tanaka@example.com"
 
 
 class TestMyNumberDetection:
@@ -139,21 +139,30 @@ class TestRegexRecognizerProperties:
 
     def test_name(self):
         r = RegexRecognizer(
-            name="test_recognizer", entity_type="TEST",
-            pattern=r"\d+", score=1.0, source="regex_registry",
+            name="test_recognizer",
+            entity_type="TEST",
+            pattern=r"\d+",
+            score=1.0,
+            source="regex_registry",
         )
         assert r.name == "test_recognizer"
 
     def test_source(self):
         r = RegexRecognizer(
-            name="test", entity_type="TEST",
-            pattern=r"\d+", score=1.0, source="custom",
+            name="test",
+            entity_type="TEST",
+            pattern=r"\d+",
+            score=1.0,
+            source="custom",
         )
         assert r.source == "custom"
 
     def test_entity_type(self):
         r = RegexRecognizer(
-            name="test", entity_type="PHONE_NUMBER",
-            pattern=r"\d+", score=1.0, source="regex_registry",
+            name="test",
+            entity_type="PHONE_NUMBER",
+            pattern=r"\d+",
+            score=1.0,
+            source="regex_registry",
         )
         assert r.entity_type == "PHONE_NUMBER"

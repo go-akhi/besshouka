@@ -4,7 +4,6 @@ from besshouka.anonymizer.operators.keep import KeepOperator
 
 
 class TestKeepOperator:
-
     def setup_method(self):
         self.operator = KeepOperator()
 

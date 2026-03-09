@@ -4,7 +4,6 @@ from besshouka.anonymizer.operators.mask import MaskOperator
 
 
 class TestMaskOperator:
-
     def setup_method(self):
         self.operator = MaskOperator()
 

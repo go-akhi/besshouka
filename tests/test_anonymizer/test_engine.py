@@ -1,19 +1,22 @@
 """Tests for the anonymization engine."""
 
 from besshouka.anonymizer.engine import anonymize
-from besshouka.models.recognizer_result import RecognizerResult
 from besshouka.models.engine_result import EngineResult
+from besshouka.models.recognizer_result import RecognizerResult
 
 
 def _make_result(start, end, entity_type, score, source, text):
     return RecognizerResult(
-        start=start, end=end, entity_type=entity_type,
-        score=score, source=source, text=text,
+        start=start,
+        end=end,
+        entity_type=entity_type,
+        score=score,
+        source=source,
+        text=text,
     )
 
 
 class TestSingleEntityAnonymization:
-
     def test_replace_person_name(self):
         text = "田中太郎さんに会いました"
         results = [_make_result(0, 4, "PERSON", 0.85, "ginza_ner", "田中太郎")]
@@ -57,7 +60,6 @@ class TestSingleEntityAnonymization:
 
 
 class TestMultipleEntityAnonymization:
-
     def test_multiple_entities_reverse_loop(self):
         """Replacing from right to left should preserve indices."""
         text = "田中太郎の電話番号は090-1234-5678です"
@@ -97,7 +99,6 @@ class TestMultipleEntityAnonymization:
 
 
 class TestEngineResultAuditTrail:
-
     def test_audit_trail_has_correct_count(self):
         text = "田中太郎さんに会いました"
         results = [_make_result(0, 4, "PERSON", 0.85, "ginza_ner", "田中太郎")]
@@ -134,11 +135,10 @@ class TestEngineResultAuditTrail:
         engine_result = anonymize(text, results, config)
 
         item = engine_result.items[0]
-        assert engine_result.text[item.start:item.end] == "<氏名>"
+        assert engine_result.text[item.start : item.end] == "<氏名>"
 
 
 class TestEdgeCases:
-
     def test_no_results_text_unchanged(self):
         text = "今日はいい天気ですね"
         engine_result = anonymize(text, [], {})

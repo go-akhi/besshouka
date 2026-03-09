@@ -1,16 +1,13 @@
 """Tests for the Typer CLI interface."""
 
-import pytest
 from typer.testing import CliRunner
 
 from besshouka.cli import app
-
 
 runner = CliRunner()
 
 
 class TestAnonymizeCommand:
-
     def test_anonymize_inline_text(self):
         result = runner.invoke(app, ["anonymize", "電話番号は090-1234-5678です"])
         assert result.exit_code == 0
@@ -21,11 +18,16 @@ class TestAnonymizeCommand:
         output_file = tmp_path / "output.txt"
         input_file.write_text("電話番号は090-1234-5678です", encoding="utf-8")
 
-        result = runner.invoke(app, [
-            "anonymize",
-            "--input", str(input_file),
-            "--output", str(output_file),
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "anonymize",
+                "--input",
+                str(input_file),
+                "--output",
+                str(output_file),
+            ],
+        )
 
         assert result.exit_code == 0
         assert output_file.exists()
@@ -39,11 +41,15 @@ class TestAnonymizeCommand:
             encoding="utf-8",
         )
 
-        result = runner.invoke(app, [
-            "anonymize",
-            "--rules", str(rules_file),
-            "電話番号は090-1234-5678です",
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "anonymize",
+                "--rules",
+                str(rules_file),
+                "電話番号は090-1234-5678です",
+            ],
+        )
 
         assert result.exit_code == 0
 
@@ -59,11 +65,15 @@ class TestAnonymizeCommand:
             encoding="utf-8",
         )
 
-        result = runner.invoke(app, [
-            "anonymize",
-            "--recognizers", str(recognizers_file),
-            "電話番号は090-1234-5678です",
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "anonymize",
+                "--recognizers",
+                str(recognizers_file),
+                "電話番号は090-1234-5678です",
+            ],
+        )
 
         assert result.exit_code == 0
 
@@ -74,7 +84,6 @@ class TestAnonymizeCommand:
 
 
 class TestAnalyzeCommand:
-
     def test_analyze_shows_detections(self):
         result = runner.invoke(app, ["analyze", "電話番号は090-1234-5678です"])
         assert result.exit_code == 0
@@ -85,9 +94,14 @@ class TestAnalyzeCommand:
         assert result.exit_code == 0
 
     def test_analyze_explain_mode(self):
-        result = runner.invoke(app, [
-            "analyze", "--explain", "電話番号は090-1234-5678です",
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "analyze",
+                "--explain",
+                "電話番号は090-1234-5678です",
+            ],
+        )
         assert result.exit_code == 0
         # Explain mode should show the source recognizer
         assert "regex" in result.stdout.lower() or "PHONE_NUMBER" in result.stdout
@@ -103,14 +117,18 @@ class TestAnalyzeCommand:
 
 
 class TestCLIErrors:
-
     def test_no_command(self):
         result = runner.invoke(app, [])
         # Typer exits with code 2 when no subcommand is given — this is expected
         assert result.exit_code in (0, 2)
 
     def test_nonexistent_input_file(self):
-        result = runner.invoke(app, [
-            "anonymize", "--input", "/nonexistent/file.txt",
-        ])
+        result = runner.invoke(
+            app,
+            [
+                "anonymize",
+                "--input",
+                "/nonexistent/file.txt",
+            ],
+        )
         assert result.exit_code != 0

@@ -4,7 +4,6 @@ from besshouka.anonymizer.operators.redact import RedactOperator
 
 
 class TestRedactOperator:
-
     def setup_method(self):
         self.operator = RedactOperator()
 

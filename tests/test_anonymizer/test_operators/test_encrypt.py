@@ -6,7 +6,6 @@ from besshouka.anonymizer.operators.encrypt import EncryptOperator
 
 
 class TestEncryptOperator:
-
     def setup_method(self):
         self.operator = EncryptOperator()
         self.key = Fernet.generate_key().decode()

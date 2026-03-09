@@ -7,7 +7,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from besshouka.config.loader import load_recognizer_config, load_operator_config
+from besshouka.config.loader import load_operator_config, load_recognizer_config
 from besshouka.orchestrator.pipeline import run
 
 app = typer.Typer(help="Besshouka — Japanese PII anonymization engine.")
@@ -44,7 +44,9 @@ def anonymize(
     input: Optional[Path] = typer.Option(None, "--input", "-i", help="Input file path."),
     output: Optional[Path] = typer.Option(None, "--output", "-o", help="Output file path."),
     rules: Optional[Path] = typer.Option(None, "--rules", "-r", help="Custom operator rules YAML."),
-    recognizers: Optional[Path] = typer.Option(None, "--recognizers", help="Custom recognizer registry YAML."),
+    recognizers: Optional[Path] = typer.Option(
+        None, "--recognizers", help="Custom recognizer registry YAML."
+    ),
 ):
     """Run the full anonymization pipeline on the input text."""
     raw = _read_input(text, input)
@@ -65,7 +67,9 @@ def analyze(
     text: Optional[str] = typer.Argument(None, help="Text to analyze."),
     input: Optional[Path] = typer.Option(None, "--input", "-i", help="Input file path."),
     explain: bool = typer.Option(False, "--explain", "-e", help="Show source and score reasoning."),
-    recognizers: Optional[Path] = typer.Option(None, "--recognizers", help="Custom recognizer registry YAML."),
+    recognizers: Optional[Path] = typer.Option(
+        None, "--recognizers", help="Custom recognizer registry YAML."
+    ),
 ):
     """Run the analyzer only and show detected PII entities."""
     raw = _read_input(text, input)

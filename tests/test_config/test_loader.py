@@ -2,11 +2,10 @@
 
 import pytest
 
-from besshouka.config.loader import load_recognizer_config, load_operator_config
+from besshouka.config.loader import load_operator_config, load_recognizer_config
 
 
 class TestLoadRecognizerConfig:
-
     def test_load_valid_config(self, recognizer_yaml_file):
         config = load_recognizer_config(recognizer_yaml_file)
         assert "recognizers" in config
@@ -30,7 +29,6 @@ class TestLoadRecognizerConfig:
 
 
 class TestLoadOperatorConfig:
-
     def test_load_valid_config(self, operator_yaml_file):
         config = load_operator_config(operator_yaml_file)
         assert "operators" in config
@@ -58,9 +56,8 @@ class TestLoadOperatorConfig:
 
 
 class TestConfigValidation:
-
     def test_missing_required_fields_rejected(self, missing_fields_yaml_file):
         """Entries missing 'pattern' should be caught during validation."""
         with pytest.raises((ValueError, KeyError)):
-            config = load_recognizer_config(missing_fields_yaml_file)
+            load_recognizer_config(missing_fields_yaml_file)
             # Validation might happen at load time or need explicit call

@@ -37,7 +37,7 @@ recognizers:
   # Japanese postal code (〒XXX-XXXX)
   - name: postal_code
     entity_type: POSTAL_CODE
-    pattern: '〒?\d{3}-\d{4}'
+    pattern: '(?<!\d)〒?\d{3}-\d{4}(?!\d)'
     score: 1.0
     source: regex_registry
 

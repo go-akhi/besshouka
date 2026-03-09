@@ -6,7 +6,6 @@ from besshouka.anonymizer.operators.hash import HashOperator
 
 
 class TestHashOperator:
-
     def setup_method(self):
         self.operator = HashOperator()
 

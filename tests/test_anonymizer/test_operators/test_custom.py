@@ -6,7 +6,6 @@ from besshouka.anonymizer.operators.custom import CustomOperator
 
 
 class TestCustomOperator:
-
     def setup_method(self):
         self.operator = CustomOperator()
 

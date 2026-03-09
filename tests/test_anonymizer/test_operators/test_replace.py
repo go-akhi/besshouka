@@ -4,7 +4,6 @@ from besshouka.anonymizer.operators.replace import ReplaceOperator
 
 
 class TestReplaceOperator:
-
     def setup_method(self):
         self.operator = ReplaceOperator()
 

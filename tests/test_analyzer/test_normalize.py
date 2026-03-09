@@ -1,6 +1,6 @@
 """Tests for the text normalization module."""
 
-from besshouka.analyzer.normalize import normalize_text, clean_punctuation
+from besshouka.analyzer.normalize import clean_punctuation, normalize_text
 
 
 class TestNormalizeText:

@@ -65,23 +65,35 @@ class TestRecognizerResultFields:
     def test_score_range_valid(self):
         """Score should be between 0.0 and 1.0."""
         result = RecognizerResult(
-            start=0, end=4, entity_type="PERSON",
-            score=0.5, source="ginza_ner", text="田中太郎",
+            start=0,
+            end=4,
+            entity_type="PERSON",
+            score=0.5,
+            source="ginza_ner",
+            text="田中太郎",
         )
         assert 0.0 <= result.score <= 1.0
 
     def test_regex_source_score_is_one(self):
         """Regex recognizer results should always have score 1.0."""
         result = RecognizerResult(
-            start=0, end=13, entity_type="PHONE_NUMBER",
-            score=1.0, source="regex_registry", text="090-1234-5678",
+            start=0,
+            end=13,
+            entity_type="PHONE_NUMBER",
+            score=1.0,
+            source="regex_registry",
+            text="090-1234-5678",
         )
         assert result.score == 1.0
 
     def test_entity_type_is_string(self):
         result = RecognizerResult(
-            start=0, end=4, entity_type="PERSON",
-            score=0.85, source="ginza_ner", text="田中太郎",
+            start=0,
+            end=4,
+            entity_type="PERSON",
+            score=0.85,
+            source="ginza_ner",
+            text="田中太郎",
         )
         assert isinstance(result.entity_type, str)
 
@@ -89,7 +101,11 @@ class TestRecognizerResultFields:
         """The text field should contain the actual matched snippet."""
         original = "田中太郎さんに会いました"
         result = RecognizerResult(
-            start=0, end=4, entity_type="PERSON",
-            score=0.85, source="ginza_ner", text="田中太郎",
+            start=0,
+            end=4,
+            entity_type="PERSON",
+            score=0.85,
+            source="ginza_ner",
+            text="田中太郎",
         )
-        assert original[result.start:result.end] == result.text
+        assert original[result.start : result.end] == result.text
